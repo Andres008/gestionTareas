@@ -5,9 +5,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import com.conexion.Conexion;
+import com.tablas.Tarea;
 
 public class Transacciones {
 
@@ -37,7 +40,7 @@ public class Transacciones {
 
 	public String ingresarTarea(String tarea, Date fecha, Date fecha_entrega, String materia, String profesor)
 			throws Exception {
-		String sql = "INSERT INTO tarea(tarea, fecha, fecha_entrega, materia, profesor) VALUES (?,?,?,?,?)";
+		String sql = "INSERT INTO tarea(tarea, fecha, fecha_entrega, materia, profesor,nota) VALUES (?,?,?,?,?,?)";
 
 		SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
 		PreparedStatement statement = conn.getConnection().prepareStatement(sql);
@@ -46,6 +49,7 @@ public class Transacciones {
 		statement.setString(3, formatoFecha.format(fecha_entrega));
 		statement.setString(4, materia);
 		statement.setString(5, profesor);
+		statement.setDouble(6, 0);
 		int rowsInserted = statement.executeUpdate();
 		if (rowsInserted > 0)
 			return "Ingreso Correcto";
@@ -74,7 +78,7 @@ public class Transacciones {
 	}
 
 	public String[] tareasPendientes() {
-		String sql = "SELECT codigo, tarea, fecha, fecha_entrega,materia, profesor FROM tarea where fecha_entrega>NOW() order by fecha_entrega ASC";
+		String sql = "SELECT codigo, tarea, fecha, fecha_entrega,materia, profesor,nota FROM tarea where fecha_entrega>NOW() order by fecha_entrega ASC";
 		Statement statement;
 		try {
 			statement = conn.getConnection().createStatement();
@@ -83,12 +87,82 @@ public class Transacciones {
 			while (result.next()) {
 				tamanio++;
 			}
-			String resultado[] = new String[tamanio];
+			String resultado[] = new String[tamanio+1];
 			result.beforeFirst();
-			tamanio = 0;
+			tamanio = 1;
+			resultado[0]= "CÓDIGO,   TAREA,   FECHA,   FECHA_ENTREGA,   MATERIA,   PROFESOR, NOTA"; 
 			while (result.next()) {
-				resultado[tamanio] = result.getString(1) + ",   " + result.getString(2) + ",      " + result.getString(3)
-						+ ",      " + result.getString(4) + ",      " + result.getString(5) + ",      " + result.getString(6);
+				String res= result.getString(1) + ",     " + result.getString(2) + ",     "
+						+ result.getString(3) + ",     " + result.getString(4) +",     " + result.getString(5)
+						+ ",     " + result.getString(6)+",     " + result.getString(7);
+				resultado[tamanio] =res;
+				tamanio++;
+			}
+			return resultado;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Tarea buscarTareaCodigo(String string) throws SQLException {
+		String sql = "SELECT * FROM tarea WHERE codigo =" + string;
+		Statement statement;
+		Tarea tarea;
+		statement = conn.getConnection().createStatement();
+		ResultSet result = statement.executeQuery(sql);
+		while (result.next()) {
+			tarea = new Tarea(Integer.parseInt(result.getString(1)), result.getString(2), result.getString(3),
+					result.getString(4), result.getString(5), result.getString(6),
+					Double.parseDouble(result.getString(7)));
+			return tarea;
+		}
+		return null;
+	}
+
+	public String modificarNotaTarea(Tarea tarea) throws SQLException {
+		String sql = "UPDATE tarea SET nota="+tarea.getNota()+" WHERE codigo="+tarea.getCodigo();
+		PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+		int rowsUpdated = statement.executeUpdate();
+		if (rowsUpdated > 0) {
+			return "Actualización Correcta";
+		}
+		return "No se actualizó ningun dato.";
+
+	}
+	
+	public String[] buscarTareas() throws SQLException{
+		String sql = "SELECT DISTINCT MATERIA FROM tarea";
+		List<String> lstResultado = new ArrayList<String>();
+		Statement statement;
+		statement = conn.getConnection().createStatement();
+		ResultSet result = statement.executeQuery(sql);
+		while (result.next()) {
+			lstResultado.add(result.getString(1));
+		}
+		return lstResultado.toArray(new String[0]);
+	}
+	
+	public String[] tareasMateria(String materia) {
+		String sql = "SELECT codigo, tarea, fecha, fecha_entrega,materia, profesor,nota FROM tarea where materia='"+materia+"' order by fecha_entrega ASC";
+		Statement statement;
+		try {
+			statement = conn.getConnection().createStatement();
+			ResultSet result = statement.executeQuery(sql);
+			int tamanio = 0;
+			while (result.next()) {
+				tamanio++;
+			}
+			String resultado[] = new String[tamanio+1];
+			result.beforeFirst();
+			tamanio = 1;
+			resultado[0]= "CÓDIGO,   TAREA,   FECHA,   FECHA_ENTREGA,   MATERIA,   PROFESOR, NOTA"; 
+			while (result.next()) {
+				String res= result.getString(1) + ",     " + result.getString(2) + ",     "
+						+ result.getString(3) + ",     " + result.getString(4) +",     " + result.getString(5)
+						+ ",     " + result.getString(6)+",     " + result.getString(7);
+				resultado[tamanio] =res;
 				tamanio++;
 			}
 			return resultado;
