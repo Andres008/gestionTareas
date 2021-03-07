@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import com.transacciones.Transacciones;
 import com.utilitarios.Utilitarios;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -48,7 +49,7 @@ public class Login extends JFrame {
 	 */
 	public Login() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 384, 300);
+		setBounds(100, 100, 614, 415);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -68,29 +69,29 @@ public class Login extends JFrame {
 					JOptionPane.showMessageDialog(null, "Usuario y/o Contraseña invalido.\n Si no se encuentra registrado favor realizar el registro.");
 			}
 		});
-		btnIngresar.setBounds(132, 168, 89, 23);
+		btnIngresar.setBounds(249, 260, 89, 23);
 		contentPane.add(btnIngresar);
 
 		JLabel lblNewLabel = new JLabel("Usuario");
-		lblNewLabel.setBounds(10, 74, 77, 14);
+		lblNewLabel.setBounds(178, 170, 77, 14);
 		contentPane.add(lblNewLabel);
 
 		JLabel lblNewLabel_1 = new JLabel("Contrase\u00F1a");
-		lblNewLabel_1.setBounds(10, 116, 77, 14);
+		lblNewLabel_1.setBounds(178, 212, 77, 14);
 		contentPane.add(lblNewLabel_1);
 
 		txtUsuario = new JTextField();
-		txtUsuario.setBounds(97, 71, 132, 20);
+		txtUsuario.setBounds(265, 167, 132, 20);
 		contentPane.add(txtUsuario);
 		txtUsuario.setColumns(10);
 
 		pswContrase = new JPasswordField();
-		pswContrase.setBounds(97, 113, 132, 20);
+		pswContrase.setBounds(265, 209, 132, 20);
 		contentPane.add(pswContrase);
 		
 		lblNewLabel_2 = new JLabel("INGRESO SISTEMA");
 		lblNewLabel_2.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 17));
-		lblNewLabel_2.setBounds(97, 11, 200, 14);
+		lblNewLabel_2.setBounds(223, 11, 200, 14);
 		contentPane.add(lblNewLabel_2);
 		
 		JButton btnRegistrar = new JButton("Registrarse");
@@ -101,7 +102,12 @@ public class Login extends JFrame {
 				reg.show();
 			}
 		});
-		btnRegistrar.setBounds(10, 227, 107, 23);
+		btnRegistrar.setBounds(10, 342, 107, 23);
 		contentPane.add(btnRegistrar);
+		
+		JLabel lblImagen = new JLabel("");
+		lblImagen.setIcon(new ImageIcon(Login.class.getResource("/imagenes/TAREAS.png")));
+		lblImagen.setBounds(141, 36, 387, 123);
+		contentPane.add(lblImagen);
 	}
 }

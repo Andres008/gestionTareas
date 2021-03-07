@@ -87,15 +87,15 @@ public class Transacciones {
 			while (result.next()) {
 				tamanio++;
 			}
-			String resultado[] = new String[tamanio+1];
+			String resultado[] = new String[tamanio + 1];
 			result.beforeFirst();
 			tamanio = 1;
-			resultado[0]= "CÓDIGO,   TAREA,   FECHA,   FECHA_ENTREGA,   MATERIA,   PROFESOR, NOTA"; 
+			resultado[0] = "CÓDIGO,   TAREA,   FECHA,   FECHA_ENTREGA,   MATERIA,   PROFESOR, NOTA";
 			while (result.next()) {
-				String res= result.getString(1) + ",     " + result.getString(2) + ",     "
-						+ result.getString(3) + ",     " + result.getString(4) +",     " + result.getString(5)
-						+ ",     " + result.getString(6)+",     " + result.getString(7);
-				resultado[tamanio] =res;
+				String res = result.getString(1) + ",     " + result.getString(2) + ",     " + result.getString(3)
+						+ ",     " + result.getString(4) + ",     " + result.getString(5) + ",     "
+						+ result.getString(6) + ",     " + result.getString(7);
+				resultado[tamanio] = res;
 				tamanio++;
 			}
 			return resultado;
@@ -122,7 +122,7 @@ public class Transacciones {
 	}
 
 	public String modificarNotaTarea(Tarea tarea) throws SQLException {
-		String sql = "UPDATE tarea SET nota="+tarea.getNota()+" WHERE codigo="+tarea.getCodigo();
+		String sql = "UPDATE tarea SET nota=" + tarea.getNota() + " WHERE codigo=" + tarea.getCodigo();
 		PreparedStatement statement = conn.getConnection().prepareStatement(sql);
 		int rowsUpdated = statement.executeUpdate();
 		if (rowsUpdated > 0) {
@@ -131,8 +131,19 @@ public class Transacciones {
 		return "No se actualizó ningun dato.";
 
 	}
-	
-	public String[] buscarTareas() throws SQLException{
+
+	public String eliminarTarea(Tarea tarea) throws SQLException {
+
+		String sql = "DELETE FROM tarea WHERE codigo=" + tarea.getCodigo();
+		PreparedStatement statement = conn.getConnection().prepareStatement(sql);
+		int rowsDeleted = statement.executeUpdate();
+		if (rowsDeleted > 0)
+			return "Tarea borrada exitosamente.!";
+		return "No se borro ningun dato.";
+
+	}
+
+	public String[] buscarTareas() throws SQLException {
 		String sql = "SELECT DISTINCT MATERIA FROM tarea";
 		List<String> lstResultado = new ArrayList<String>();
 		Statement statement;
@@ -143,9 +154,10 @@ public class Transacciones {
 		}
 		return lstResultado.toArray(new String[0]);
 	}
-	
+
 	public String[] tareasMateria(String materia) {
-		String sql = "SELECT codigo, tarea, fecha, fecha_entrega,materia, profesor,nota FROM tarea where materia='"+materia+"' order by fecha_entrega ASC";
+		String sql = "SELECT codigo, tarea, fecha, fecha_entrega,materia, profesor,nota FROM tarea where materia='"
+				+ materia + "' order by fecha_entrega ASC";
 		Statement statement;
 		try {
 			statement = conn.getConnection().createStatement();
@@ -154,15 +166,15 @@ public class Transacciones {
 			while (result.next()) {
 				tamanio++;
 			}
-			String resultado[] = new String[tamanio+1];
+			String resultado[] = new String[tamanio + 1];
 			result.beforeFirst();
 			tamanio = 1;
-			resultado[0]= "CÓDIGO,   TAREA,   FECHA,   FECHA_ENTREGA,   MATERIA,   PROFESOR, NOTA"; 
+			resultado[0] = "CÓDIGO,   TAREA,   FECHA,   FECHA_ENTREGA,   MATERIA,   PROFESOR, NOTA";
 			while (result.next()) {
-				String res= result.getString(1) + ",     " + result.getString(2) + ",     "
-						+ result.getString(3) + ",     " + result.getString(4) +",     " + result.getString(5)
-						+ ",     " + result.getString(6)+",     " + result.getString(7);
-				resultado[tamanio] =res;
+				String res = result.getString(1) + ",     " + result.getString(2) + ",     " + result.getString(3)
+						+ ",     " + result.getString(4) + ",     " + result.getString(5) + ",     "
+						+ result.getString(6) + ",     " + result.getString(7);
+				resultado[tamanio] = res;
 				tamanio++;
 			}
 			return resultado;

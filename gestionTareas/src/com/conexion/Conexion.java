@@ -20,8 +20,8 @@ public class Conexion {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager.getConnection(url, login, password);
-			if (connection != null) {
-				System.out.println("Conexión a base de datos " + bd + " OK\n");				
+			if (connection == null) {
+				System.out.println("Error en la conexion a la base de datos: " + bd);
 			}
 		} catch (SQLException e) {
 			System.out.println(e);

@@ -47,7 +47,7 @@ public class Deberes extends JFrame {
 	 */
 	public Deberes() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 683, 420);
+		setBounds(100, 100, 789, 420);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -55,7 +55,7 @@ public class Deberes extends JFrame {
 
 		JLabel lblNewLabel = new JLabel("DEBERES");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 17));
-		lblNewLabel.setBounds(216, 11, 93, 14);
+		lblNewLabel.setBounds(360, 11, 93, 14);
 		contentPane.add(lblNewLabel);
 
 		JButton btnNuevaTarea = new JButton("NUEVA TAREA");
@@ -66,21 +66,22 @@ public class Deberes extends JFrame {
 				nuevaTarea.show();
 			}
 		});
-		btnNuevaTarea.setBounds(208, 51, 153, 23);
+		btnNuevaTarea.setBounds(327, 60, 153, 23);
 		contentPane.add(btnNuevaTarea);
 		
 		JList listDeberes = new JList();
 		listDeberes.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
 				try {
-					Transacciones tr = new Transacciones();
-					String datos[] = listDeberes.getSelectedValue().toString().split(",");
-					Tarea tarea = tr.buscarTareaCodigo(datos[0]);
-					RegistrarNota nota = new RegistrarNota(frame,tarea);
-					nota.show();
-					setVisible(false);
+					if (listDeberes.getSelectedIndex() != 0) {
+						setVisible(false);
+						Transacciones tr = new Transacciones();
+						String datos[] = listDeberes.getSelectedValue().toString().split(",");
+						Tarea tarea = tr.buscarTareaCodigo(datos[0]);
+						RegistrarNota nota = new RegistrarNota(frame,tarea);
+						nota.show();
+					}
 				} catch (SQLException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -98,7 +99,7 @@ public class Deberes extends JFrame {
 				return values[index];
 			}
 		});
-		listDeberes.setBounds(31, 94, 581, 230);
+		listDeberes.setBounds(31, 94, 732, 230);
 		contentPane.add(listDeberes);
 		
 		JButton btnNewButton = new JButton("Reporte");
@@ -109,14 +110,23 @@ public class Deberes extends JFrame {
 				reporte.show();
 			}
 		});
-		btnNewButton.setBounds(208, 335, 153, 23);
+		btnNewButton.setBounds(327, 335, 153, 23);
 		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_1 = new JButton("Salir del Sistema");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				setVisible(false);
+				frameLogin = new Login();
+				frameLogin.setVisible(true);
+			}
+		});
+		btnNewButton_1.setBounds(10, 347, 153, 23);
+		contentPane.add(btnNewButton_1);
 	}
 
 	public Deberes(Login frame) {
 		this();
-		this.frame = new Deberes();
-		this.frame.setVisible(true);
 		this.frameLogin = frame;
 	}
 }
